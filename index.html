@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Our superheroes</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+    </header>
+
+    <section>
+
+    </section>
+
+    <script>
+
+        const header = document.querySelector('header');
+        const section = document.querySelector('section');
+
+        const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+
+
+        // -----
+
+
+        let request = new XMLHttpRequest();
+        request.open('GET', requestURL);
+
+        request.responseType = 'text'; // now we're getting a string!
+        request.send();
+
+        // request.onload = function () {
+        //     const superHeroesText = request.response; // get the string from the response
+        //     const superHeroes = JSON.parse(superHeroesText); // convert it to an object
+        //     populateHeader(superHeroes);
+        //     showHeroes(superHeroes);
+        // }
+
+        const loadRequestEventListener = function() {
+            const superHeroesText = this.response;
+            const superHeroes = JSON.parse(superHeroesText);
+            populateHeader(superHeroes);
+            showHeroes(superHeroes);
+        }
+
+
+        // -----
+
+
+        // 変数.addEventListener('イベント名', 発火した時に実行する関数);
+        request.addEventListener('load', loadRequestEventListener);
+
+        const populateHeader = (obj) => {
+            // myH1にh1を代入
+            const myH1 = document.createElement('h1');
+            // myH1に配列内のsquadNameを代入
+            myH1.textContent = obj['squadName'];
+            // ヘッダーの末尾にmyH1を追加する
+            header.appendChild(myH1);
+
+            // maParaにp要素を代入
+            const myPara = document.createElement('p');
+            //　？
+            myPara.textContent = 'Hometown:' + obj['homeTown'] + '//Formed:' + obj['formed'];
+            // ヘッダーの末尾にmyParaを代入
+            header.appendChild(myPara);
+        }
+
+
+        const showHeroes = (obj) => {
+            // heroesに配列内のmembersを代入
+            const heroes = obj['members'];
+
+            //0以上heroesの数未満までループする
+            for (let i = 0; i < heroes.length; i++) {
+                // const(a)=document.createElement('b'); ->(a)に(b)要素を代入
+                const myArticle = document.createElement('article');
+                const myH2 = document.createElement('h2');
+                const myPara1 = document.createElement('p');
+                const myPara2 = document.createElement('p');
+                const myPara3 = document.createElement('p');
+                const myList = document.createElement('ul');
+
+                // heros.nameをmyH2に代入
+                myH2.textContent = heroes[i].name;
+                // 「Secret identity:」+ 「heroes.secretIdentity」を結合したものをmyPara1のtextContentに代入する（2,3も同様）
+                myPara1.textContent = 'Secret identity: ' + heroes[i].secretIdentity;
+                myPara2.textContent = 'Age: ' + heroes[i].age;
+                myPara3.textContent = 'Superpowers:';
+
+                // superPowersにpowersを代入
+                const superPowers = heroes[i].powers;
+                // 0以上superPowersの数未満までループする
+                for (let j = 0; j < superPowers.length; j++) {
+                    // listItemにli要素を代入する
+                    const listItem = document.createElement('li');
+                    // listItemのコメントにsuperPowers[j]を代入する
+                    listItem.textContent = superPowers[j];
+                    // myListの末尾にListItemを代入
+                    myList.appendChild(listItem);
+                }
+
+                // myArticleにmyH2を追加（〜myListまで同様）
+                myArticle.appendChild(myH2);
+                myArticle.appendChild(myPara1);
+                myArticle.appendChild(myPara2);
+                myArticle.appendChild(myPara3);
+                myArticle.appendChild(myList);
+
+                // sectionにmyArticleを追加
+                section.appendChild(myArticle);
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
